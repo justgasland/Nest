@@ -130,3 +130,21 @@ $(document).ready(function () {
         
     });
 });
+
+// Add to cart functionality
+
+$("#add-to-btn").on("click", function () {
+    let quantity = $("product-quantity").val();
+    let product_title = $("#product-title").val();
+    let product_id = $("#product-id").val();
+    let product_price = $("#product-price").text();
+
+    let this_val = $(this);
+
+    console.log("Product ID: ", product_id);    
+    console.log("Product Title: ", product_title);
+    console.log("Product Price: ", product_price);
+    console.log("Quantity: ", quantity);
+    console.log("Button clicked: ", this_val);
+
+});

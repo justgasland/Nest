@@ -71,10 +71,11 @@
                                             </div>
                                             <div class="clearfix product-price-cover">
                                                 <div class="product-price primary-color float-left">
-                                                    <span class="current-price text-brand">${{products.price}}</span>
+                                                    <span class="current-price text-brand" id="product-price">${{products.price}}</span>
                                                     <span>
                                                         <span class="save-price font-md color3 ml-15">-{{products.get_percentage|floatformat:0}}% Off</span>
-                                                        <span class="old-price font-md ml-15">$52</span>
+                                                        
+                                                        <span class="old-price font-md ml-15">${{products.old_price}}</span>
                                                     </span>
                                                 </div>
                                             </div>
@@ -92,13 +93,16 @@
                                                 </ul>
                                             </div> -->
                                             <div class="detail-extralink mb-50">
-                                                <div class="detail-qty border radius">
+                                                <!-- <div class="detail-qty border radius">
                                                     <a href="#" class="qty-down"><i class="fi-rs-angle-small-down"></i></a>
                                                     <span class="qty-val">1</span>
                                                     <a href="#" class="qty-up"><i class="fi-rs-angle-small-up"></i></a>
-                                                </div>
+                                                </div> -->
+                                                <input type="number" value="1" name="" id="product-quantity" class="w-25 mb-10"><br>
                                                 <div class="product-extra-link2">
-                                                    <button type="submit" class="button button-add-to-cart"><i class="fi-rs-shopping-cart"></i>Add to cart</button>
+                                                    <input type="hidden" value="{{products.pid}}" id="product-id" name="pid" >
+                                                    <input type="hidden" value="{{products.title}}" id="product-title" name="title"  >
+                                                    <button type="button" class="button button-add-to-cart" id="add-to-btn"><i class="fi-rs-shopping-cart" ></i>Add to cart</button>
                                                     <a aria-label="Add To Wishlist" class="action-btn hover-up" href="shop-wishlist"><i class="fi-rs-heart"></i></a>
                                                     <a aria-label="Compare" class="action-btn hover-up" href="shop-compare"><i class="fi-rs-shuffle"></i></a>
                                                 </div>
