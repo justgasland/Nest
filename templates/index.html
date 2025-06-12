@@ -247,11 +247,20 @@
                                     </div>
                                     <div class="product-card-bottom">
                                         <div class="product-price">
-                                            <span>${{ product.price }}</span>
-                                            <span class="old-price">${{ product.old_price }}</span>
+                                            <span>$</span><span class="current-product-price-{{product.pid}}">{{ product.price }}</span>
+                                            <span>$</span><span class="old-price"> {{ product.old_price }}</span>
                                         </div>
                                         <div class="add-cart">
-                                            <a class="add" href="shop-cart"><i class="fi-rs-shopping-cart mr-5"></i>Add </a>
+                                            <!-- <input type="hidden" value="1" id="product-quantity" class="product-quantity-{{ product.pid }}">
+                                            <input type="hidden" class="product-pid-{{product.pid}}" value="{{ product.pid }}" >
+                                            <input type="hidden" class="product-image-{{product.pid}}" value="{{product.image}}">
+                                            <input type="hidden" class="product-title-{{product.pid}}" value="{{product.title}}"> -->
+                                            <input type="hidden" value="1" class="product-quantity-{{ product.pid }}">
+                                            <input type="hidden" class="product-id-{{product.pid}}" value="{{ product.id }}">
+                                            <input type="hidden" class="product-image-{{product.pid}}" value="{{ product.image }}">
+                                            <input type="hidden" class="product-title-{{product.pid}}" value="{{ product.title }}">
+
+                                            <button class="add button-add-to-cart-btn" data-index="{{product.pid}}" id="add-to-btn" style="border: none;" href="shop-cart"><i class="fi-rs-shopping-cart mr-5"></i>Add </button>
                                         </div>
                                     </div>
                                 </div>
@@ -301,10 +310,22 @@
                                     </div>
                                     <div class="product-card-bottom">
                                         <div class="product-price">
-                                            <span>${{ product.price }}</span>
-                                            <span class="old-price">${{ product.old_price }}</span>
+                                            <span>$</span><span class="current-product-price-{{product.pid}}">{{ product.price }}</span>
+                                            <span>$</span><span class="old-price"> {{ product.old_price }}</span>
                                         </div>
                                         <div class="add-cart">
+
+                                            <!-- <input type="hidden" value="1" id="product-quantity" class="product-quantity-{{ product.pid }}">
+                                            <input type="hidden" class="product-pid-{{product.pid}}" value="{{ product.pid }}" >
+                                            <input type="hidden" class="product-image-{{product.pid}}" value="{{product.image}}">
+                                            <input type="hidden" class="product-title-{{product.pid}}" value="{{product.title}}"> -->
+                                            <input type="hidden" value="1" class="product-quantity-{{ product.pid }}">
+                                            <input type="hidden" class="product-id-{{product.pid}}" value="{{ product.id }}">
+                                            <input type="hidden" class="product-image-{{product.pid}}" value="{{ product.image }}">
+                                            <input type="hidden" class="product-title-{{product.pid}}" value="{{ product.title }}">
+
+                                            <button class="add button-add-to-cart-btn" data-index="{{product.pid}}" id="add-to-btn" style="border: none;" href="shop-cart"><i class="fi-rs-shopping-cart mr-5"></i>Add </button>
+                                        </div>
                                             <a class="add" href="shop-cart"><i class="fi-rs-shopping-cart mr-5"></i>Add </a>
                                         </div>
                                     </div>

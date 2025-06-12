@@ -272,21 +272,21 @@
                                 <div class="header-action-icon-2">
                                     <a href="shop-compare">
                                         <img class="svgInject" alt="Nest" src="{% static 'assets/imgs/theme/icons/icon-compare-1.svg' %}">
-                                        <span class="pro-count blue">3</span>
+                                        <span class="pro-count blue" class="cart-items-count">3</span>
                                     </a>
                                     <a href="shop-compare"><span class="lable ml-0">Compare</span></a>
                                 </div>
                                 <div class="header-action-icon-2">
                                     <a href="shop-wishlist">
                                         <img class="svgInject" alt="Nest" src="{% static 'assets/imgs/theme/icons/icon-heart-1.svg' %}">
-                                        <span class="pro-count blue">6</span>
+                                        <span class="pro-count blue cart-items-count">{{request.session.cart_data_obj|length}}</span>
                                     </a>
                                     <a href="shop-wishlist"><span class="lable">Wishlist</span></a>
                                 </div>
                                 <div class="header-action-icon-2">
                                     <a class="mini-cart-icon" href="shop-cart">
                                         <img alt="Nest" src="{% static 'assets/imgs/theme/icons/icon-cart-1.svg' %}">
-                                        <span class="pro-count blue">2</span>
+                                        <span class="pro-count blue cart-items-count">{{request.session.cart_data_obj|length}}</span>
                                     </a>
                                     <a href="shop-cart"><span class="lable">Cart</span></a>
                                     <div class="cart-dropdown-wrap cart-dropdown-hm2">

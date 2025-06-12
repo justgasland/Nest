@@ -71,7 +71,7 @@
                                             </div>
                                             <div class="clearfix product-price-cover">
                                                 <div class="product-price primary-color float-left">
-                                                    <span class="current-price text-brand" id="product-price">${{products.price}}</span>
+                                                    <span>$</span><span class="current-price text-brand" id="product-price">{{products.price}}</span>
                                                     <span>
                                                         <span class="save-price font-md color3 ml-15">-{{products.get_percentage|floatformat:0}}% Off</span>
                                                         
@@ -82,23 +82,11 @@
                                             <div class="short-desc mb-30">
                                                 <p class="font-lg">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Aliquam rem officia, corrupti reiciendis minima nisi modi, quasi, odio minus dolore impedit fuga eum eligendi.</p>
                                             </div>
-                                            <!-- <div class="attr-detail attr-size mb-30">
-                                                <strong class="mr-10">Size / Weight: </strong>
-                                                <ul class="list-filter size-filter font-small">
-                                                    <li><a href="#">50g</a></li>
-                                                    <li class="active"><a href="#">60g</a></li>
-                                                    <li><a href="#">80g</a></li>
-                                                    <li><a href="#">100g</a></li>
-                                                    <li><a href="#">150g</a></li>
-                                                </ul>
-                                            </div> -->
+                                            {% csrf_token %}
                                             <div class="detail-extralink mb-50">
-                                                <!-- <div class="detail-qty border radius">
-                                                    <a href="#" class="qty-down"><i class="fi-rs-angle-small-down"></i></a>
-                                                    <span class="qty-val">1</span>
-                                                    <a href="#" class="qty-up"><i class="fi-rs-angle-small-up"></i></a>
-                                                </div> -->
-                                                <input type="number" value="1" name="" id="product-quantity" class="w-25 mb-10"><br>
+                                                
+                                                <input type="number" value="1" name="" class="product-quantity w-25 mb-10">
+
                                                 <div class="product-extra-link2">
                                                     <input type="hidden" value="{{products.pid}}" id="product-id" name="pid" >
                                                     <input type="hidden" value="{{products.title}}" id="product-title" name="title"  >
@@ -397,13 +385,13 @@
                                                         </div>
                                                     </div>
                                                     <div class="product-content-wrap">
-                                                        <h2><a href="{% url 'product-details' products.pid %}" tabindex="0">{{products.title}}%</a></h2>
+                                                        <h2><a href="{% url 'product-details' products.pid %}" tabindex="0">{{products.title}}</a></h2>
                                                         <div class="rating-result" title="90%">
                                                             <span> </span>
                                                         </div>
                                                         <div class="product-price">
-                                                            <span>${{products.price}} </span>
-                                                            <span class="old-price">${{products.old_price}}</span>
+                                                            <span>$</span><span id="current-product-price"> {{products.price}} </span>
+                                                            <span>$</span><span class="old-price">{{products.old_price}}</span>
                                                         </div>
                                                     </div>
                                                 </div>
