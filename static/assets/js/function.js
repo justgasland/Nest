@@ -103,7 +103,8 @@ $(document).ready(function () {
         });
 
     });
-    $('#max_price').onblur('change', function () {
+    
+    $('#max_price').on('blur','change', function () {
         let max_price = $(this).attr()
         let min_price = $(this).attr()
         let current_price = $(this).val()
@@ -129,74 +130,26 @@ $(document).ready(function () {
         
         
     });
-});
-
-// Add to cart functionality
-// $(document).ready(function () {
-//     $("#add-to-btn").on("click", function () {
-//         let quantity = $(".product-quantity").val();
-//         let product_title = $("#product-title").val();
-//         let product_id = $("#product-id").val();
-//         let product_price = $("#current-product-price").text();
-
-//         let this_val = $(this);
-
-//         console.log("Product ID: ", product_id);
-//         console.log("Product Title: ", product_title);
-//         console.log("Product Price: ", product_price);
-//         console.log("Quantity: ", quantity);
-//         console.log("Current element: ", this_val);
-
-//         $.ajax({
-//             url: '/add-to-cart/',
-//             method: 'GET',
-//             data: {
-//                 'id': product_id,
-//                 'qty': quantity,
-//                 'title': product_title,
-//                 'price': product_price
-//             },
-//             dataType: 'json',
-//             beforeSend: function () {
-//                 this_val.html('<i class="fas fa-spinner fa-spin"></i> Adding to cart');
-//                 console.log("adding item  to cart ");
-//             },
-//             success: function (response) {
-//                 this_val.html('<i class="fas fa-check"></i> Added to cart');
-//                 console.log("added to cart successfully");
-//                 $(".cart-items-count").text(response.totalcartitems);
-                
-
-//             },
-
-//         })
-
-//     });
-// });
-
-$(document).ready(function () {
-    $("#add-to-btn").on("click", function () {
-
+    
+    
+    $(".add-to-btn").on("click", function () {
         let this_val = $(this);
-        let index_val=this_val.attr("data-index")
+        let index_val = this_val.attr("data-index");
 
-        let quantity = $(".product-quantity-"+ index_val) .val();
-        let product_title = $(".product-title-"+ index_val).val();
-        
-        let product_id = $(".product-id-"+ index_val).val();
-        let product_price = $(".current-product-price.-"+ index_val).text();
-        
-        let product_pid= $(".product.pid-"+ index_val).text()
-        let product_image=$(".product-image-"+ index_val).val();
-        
+        let quantity = $(".product-quantity-" + index_val).val();
+        let product_title = $(".product-title-" + index_val).val();
+        let product_id = $(".product-id-" + index_val).val();
+        let product_price = $(".current-product-price-" + index_val).text().trim();
+        let product_pid = $(".product-pid-" + index_val).val()
+        let product_image = $(".product-image-" + index_val).val();
 
         console.log("Product ID: ", product_id);
         console.log("Product Title: ", product_title);
         console.log("Product Price: ", product_price);
         console.log("Quantity: ", quantity);
-        console.log("PID", product_pid);
-        console.log("Image", product_image);
-        console.log("Index", index_val)
+        console.log("PID: ", product_pid);
+        console.log("Image: ", product_image);
+        console.log("Index: ", index_val);
         console.log("Current element: ", this_val);
 
         $.ajax({
@@ -209,23 +162,109 @@ $(document).ready(function () {
                 'price': product_price,
                 'pid': product_pid,
                 'image': product_image
-                
             },
             dataType: 'json',
             beforeSend: function () {
                 this_val.html('<i class="fas fa-spinner fa-spin"></i> Adding to cart');
-                console.log("adding item  to cart ");
+                console.log("adding item to cart ");
             },
             success: function (response) {
                 this_val.html('<i class="fas fa-check"></i> Added to cart');
                 console.log("added to cart successfully");
                 $(".cart-items-count").text(response.totalcartitems);
-                
-
             },
+        });
+    });
+    
+    
+    $(".delete-product").on("click", function(){
+        let this_val = $(this);
+        let product_id= $(this).attr("data-product");
+        console.log("Product ID to delete: ", product_id);
+        $.ajax({
+            url: '/delete-from-cart/',
+            method: 'GET',
+            data: {
+                'id': product_id
+            },
+            dataType: 'json',
+            beforeSend: function () {
+                // this_val.hide();
+                this_val.html('<i class="fas fa-spinner fa-spin"></i> Deleting');
+                console.log("deleting item from cart ");
+            },
+            success: function (response) {
+                this_val.html('<i class="fas fa-check"></i> Deleted');
+                console.log("deleted from cart successfully");
+                $(".cart-items-count").text(response.totalcartitems);
+                $("#cart-list").html(response.data);
+                
+            },
+        });
 
-        })
 
     });
+    
+    // $(".update-product").on("click", function(){
+    //     let this_val = $(this);
+    //     let product_pid= $(this).attr("data-product");
+    //     let product_qty= $(".product-quantity-" + product_pid).val();
+        
+
+
+    //     console.log("Product ID to update: ", product_pid);
+    //     console.log("Product Quantity to update: ", product_qty);
+    //     $.ajax({
+    //         url: '/update-from-cart/',
+    //         method: 'GET',
+    //         data: {
+    //             'id': product_pid,
+    //             'qty': product_qty
+    //         },
+    //         dataType: 'json',
+    //         beforeSend: function () {
+    //             // this_val.hide();
+    //             this_val.html('<i class="fas fa-spinner fa-spin"></i> Updating');
+    //             console.log("updating item in cart ");
+    //         }, 
+    //         success: function (response) {
+    //             this_val.html('<i class="fas fa-check"></i> Updated');
+    //             console.log("updated from cart successfully");
+    //             $(".cart-items-count").text(response.totalcartitems);
+    //             $("#cart-list").html(response.data);
+                
+    //         },
+    //     });
+
+    // });
 });
+$(document).on("click", ".update-product", function(){
+    let this_val = $(this);
+    let product_id = this_val.attr("data-product");
+    let product_qty = $(".product-quantity-" + product_id).val();
+
+    console.log("Product ID to update: ", product_id);
+    console.log("Product Quantity to update: ", product_qty);
+
+    $.ajax({
+        url: '/update-from-cart/',
+        method: 'GET',
+        data: {
+            'id': product_id,
+            'qty': product_qty
+        },
+        dataType: 'json',
+        beforeSend: function () {
+            this_val.html('<i class="fas fa-spinner fa-spin"></i> Updating');
+            console.log("updating item in cart ");
+        }, 
+        success: function (response) {
+            this_val.html('<i class="fas fa-check"></i> Updated');
+            console.log("updated from cart successfully");
+            $(".cart-items-count").text(response.totalcartitems);
+            $("#cart-list").html(response.data);
+        }
+    });
+});
+
 

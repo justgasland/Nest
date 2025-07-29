@@ -71,7 +71,7 @@
                                             </div>
                                             <div class="clearfix product-price-cover">
                                                 <div class="product-price primary-color float-left">
-                                                    <span>$</span><span class="current-price text-brand" id="product-price">{{products.price}}</span>
+                                                    <span>$</span><span class="current-price current-product-price-{{ products.pid }} text-brand"> {{products.price}} </span>
                                                     <span>
                                                         <span class="save-price font-md color3 ml-15">-{{products.get_percentage|floatformat:0}}% Off</span>
                                                         
@@ -85,14 +85,19 @@
                                             {% csrf_token %}
                                             <div class="detail-extralink mb-50">
                                                 
-                                                <input type="number" value="1" name="" class="product-quantity w-25 mb-10">
+                                                <input type="number" value="1" name="" class="product-quantity w-25 mb-10  product-quantity-{{ product.pid }}">
 
                                                 <div class="product-extra-link2">
-                                                    <input type="hidden" value="{{products.pid}}" id="product-id" name="pid" >
-                                                    <input type="hidden" value="{{products.title}}" id="product-title" name="title"  >
-                                                    <button type="button" class="button button-add-to-cart" id="add-to-btn"><i class="fi-rs-shopping-cart" ></i>Add to cart</button>
+                                                
+                                                    <input type="hidden" class="product-title-{{product.pid}}" value="{{product.title}}"> 
+                                                    <!-- <input type="hidden" value="1" class="product-quantity-{{ product.pid }}"> -->
+                                                    <input type="hidden" class="product-id-{{product.pid}}" value="{{ product.id }}">
+                                                    <input type="hidden" class="product-image-{{product.pid}}" value="{{ product.image }}">
+                                                    <input type="hidden" class="product-title-{{product.pid}}" value="{{ product.title }}">
+                                          
+                                                    <button type="button" class="button add button-add-to-cart-btn add-to-btn" data-index="{{product.pid}}" style="border: none;"> <i class="fi-rs-shopping-cart mr-5"></i>Add To Cart</button>
                                                     <a aria-label="Add To Wishlist" class="action-btn hover-up" href="shop-wishlist"><i class="fi-rs-heart"></i></a>
-                                                    <a aria-label="Compare" class="action-btn hover-up" href="shop-compare"><i class="fi-rs-shuffle"></i></a>
+                                                    <a aria-label="Compare" class="action-btn hover-up" href="shop-compare"><i class="fi-rs-shuffle"></i></a> 
                                                 </div>
                                             </div>
                                             <div class="font-xs">
@@ -365,7 +370,7 @@
                                     <div class="col-12">
                                         
                                         <div class="row related-products">
-                                            {% for products in p %}
+                                            <!-- {% for products in p %}
                                             <div class="col-lg-3 col-md-4 col-12 col-sm-6">
                                                 <div class="product-cart-wrap hover-up">
                                                     <div class="product-img-action-wrap">
@@ -390,13 +395,55 @@
                                                             <span> </span>
                                                         </div>
                                                         <div class="product-price">
-                                                            <span>$</span><span id="current-product-price"> {{products.price}} </span>
+                                                            <span>$</span><span id="current-price current-product-price-{{ products.id }} text-brand"> {{ products.price }} </span>
                                                             <span>$</span><span class="old-price">{{products.old_price}}</span>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                            {%endfor%}
+                                            {%endfor%} -->
+                                            {% for products in p %}
+                                            <div class="col-lg-3 col-md-4 col-12 col-sm-6">
+                                                <div class="product-cart-wrap hover-up">
+                                                    <div class="product-img-action-wrap">
+                                                        <div class="product-img product-img-zoom">
+                                                            <a href="{% url 'product-details' products.pid %}" tabindex="0">
+                                                                <img class="default-img" src="{{ products.image.url }}" alt="">
+                                                                <img class="hover-img" src="{{ products.image.url }}" alt="">
+                                                            </a>
+                                                        </div>
+                                                        <div class="product-action-1">
+                                                            <a aria-label="Quick view" class="action-btn small hover-up" data-bs-toggle="modal"
+                                                                data-bs-target="#quickViewModal"><i class="fi-rs-search"></i></a>
+                                                            <a aria-label="Add To Wishlist" class="action-btn small hover-up" href="shop-wishlist" tabindex="0"><i
+                                                                    class="fi-rs-heart"></i></a>
+                                                            <a aria-label="Compare" class="action-btn small hover-up" href="shop-compare" tabindex="0"><i
+                                                                    class="fi-rs-shuffle"></i></a>
+                                                        </div>
+                                                        <div class="product-badges product-badges-position product-badges-mrg">
+                                                            <span class="hot">-{{ products.get_percentage|floatformat:0 }}</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="product-content-wrap">
+                                                        <h2>
+                                                            <a href="{% url 'product-details' products.pid %}" tabindex="0">{{ products.title }}</a>
+                                                        </h2>
+                                                        <div class="rating-result" title="90%">
+                                                            <span> </span>
+                                                        </div>
+                                                        <div class="product-price">
+                                                            <span>$</span>
+                                                            <span class="current-product-price-{{ products.pid }}" class="text-brand">
+                                                                {{ products.price }}
+                                                            </span>
+                                                            <span>$</span>
+                                                            <span class="old-price">{{ products.old_price }}</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            {% endfor %}
+
                                     
                                         </div>
                                         
