@@ -141,7 +141,7 @@ class CartItemOrders(models.Model):
     order = models.ForeignKey(CartOrders, on_delete=models.CASCADE)
     product_status = models.CharField(max_length=200)
     item = models.CharField(max_length=200)
-    image = models.CharField(max_length=255)  # Fixed missing max_length
+    image = models.CharField(max_length=255)  
     quantity = models.IntegerField(default=0)
 
     price = models.DecimalField(max_digits=10, decimal_places=2, default=1.99)

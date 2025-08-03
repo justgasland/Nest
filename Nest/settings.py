@@ -45,6 +45,9 @@ INSTALLED_APPS = [
     # Third Party
     'taggit',
     # 'ckeditor',
+
+    # paypal
+    'paypal.standard.ipn',
 ]
 
 MIDDLEWARE = [
@@ -156,3 +159,8 @@ JAZZMIN_SETTINGS={
 CKEDITOR_UPLOAD_PATH="uploads"
 
 
+
+PAYPAL_RECEIVER_EMAIL = 'abdulgaffarsonola@gmail.com'
+PAYPAL_TEST = True  
+
+LOGIN_URL = 'login'

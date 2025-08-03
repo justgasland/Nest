@@ -1,6 +1,10 @@
 from django.urls import path
 from .views import home, productlist, product_details_view, category_lists_view, category_product_list_view, vendor_lists_view, vendor_details_view, tag_list, Review_form
 from .views import search_view, filter_products, add_to_cart , cart_view, delete_from_cart, update_from_cart, checkout_view
+from django.urls import include
+
+from .views import payment_completed, payment_failed
+
 urlpatterns = [
     # product
     path('', home, name='home'),
@@ -40,4 +44,13 @@ urlpatterns = [
 
     # Checkout
     path('checkout/', checkout_view, name='checkout_view'),
+
+    # Paypal
+    path('paypal/', include('paypal.standard.ipn.urls')),
+
+    # Payment Completed
+    path('payment-completed/', payment_completed, name='payment-completed'),
+
+    # payment failed
+    path('payment-failed/', payment_failed, name='payment-failed'),
 ]
