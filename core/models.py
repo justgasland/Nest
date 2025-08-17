@@ -5,9 +5,9 @@ from userauth.models import User
 from  taggit.managers import TaggableManager
 
 STATUS_CHOICE = [
-    ("process", "Processing"),
-    ("shipped", "Shipped"),
-    ("delivered", "Delivered"),
+    ("Processing", "Processing"),
+    ("Shipped", "Shipped"),
+    ("Delivered", "Delivered"),
 ]
 
 STATUS = [
@@ -126,7 +126,7 @@ class ProductImages(models.Model):
         verbose_name_plural = "Product Images"
 
 class CartOrders(models.Model):
-    order = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     price = models.DecimalField(max_digits=10, decimal_places=2, default=1.99)
     paid_status = models.BooleanField(default=False)
     order_date = models.DateField(auto_now_add=True)
@@ -137,6 +137,7 @@ class CartOrders(models.Model):
         verbose_name_plural = "Cart Orders"
 
 class CartItemOrders(models.Model):
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     invoice_no= models.CharField(max_length=100)
     order = models.ForeignKey(CartOrders, on_delete=models.CASCADE)
     product_status = models.CharField(max_length=200)

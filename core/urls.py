@@ -3,7 +3,7 @@ from .views import home, productlist, product_details_view, category_lists_view,
 from .views import search_view, filter_products, add_to_cart , cart_view, delete_from_cart, update_from_cart, checkout_view
 from django.urls import include
 
-from .views import payment_completed, payment_failed
+from .views import payment_completed, payment_failed, customer_dashboard, order_detail
 
 urlpatterns = [
     # product
@@ -53,4 +53,10 @@ urlpatterns = [
 
     # payment failed
     path('payment-failed/', payment_failed, name='payment-failed'),
+
+    # Customer Dashboard
+    path('customer-dashboard/', customer_dashboard, name='customer-dashboard'),
+
+    # Order Detail
+    path('order-detail/<int:id>/', order_detail, name='order-detail'),
 ]

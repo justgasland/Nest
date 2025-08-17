@@ -302,55 +302,116 @@ from paypal.standard.forms import PayPalPaymentsForm
 from django.contrib.auth.decorators import login_required
 
 @login_required
-def checkout_view(request):
+# def checkout_view(request):
     
-    cart_toal_amount = 0
-    total_amount=0
+#     cart_toal_amount = 0
+#     total_amount=0
 
-    if 'cart_data_obj' in request.session:
-        for id, item in request.session['cart_data_obj'].items():
-            # item['qty'] = int(item['qty'])
-            total_amount += int(item['qty']) * float(item['price'])
+#     if 'cart_data_obj' in request.session:
+#         for id, item in request.session['cart_data_obj'].items():
+#             # item['qty'] = int(item['qty'])
+#             total_amount += int(item['qty']) * float(item['price'])
 
-            order = CartItemOrders.objects.create(
-                user=request.user,
-                price=total_amount
-            )
+#             order = CartItemOrders.objects.create(
+#                 user=request.user,
+#                 price=total_amount
+#             )
         
-        for id, item in request.session['cart_data_obj'].items():
-            cart_toal_amount += int(item['qty']) * float(item['price'])
+#         for id, item in request.session['cart_data_obj'].items():
+#             cart_toal_amount += int(item['qty']) * float(item['price'])
     
-            cart_orders = CartOrders.objects.create(
-                order= order,
-                invoice_no= "INVOICE-ID " + str(order.id),
-                item=item['title'],
-                image=item['image'],
-                
-            )
+#             cart_orders = CartOrders.objects.create(
+#                 order= order,
+#                 invoice_no= "INVOICE-ID " + str(order.id),
+#                 item=item['title'],
+#                 image=item['image'],
+#                 qty=item['qty'],
+#                 price=item['price'],
+#                 total= float(item['qty']) * float(item['price']),
+
+#             )
     
     
     
-    host= request.get_host()
-    paypal_dict= {
+#     host= request.get_host()
+#     paypal_dict= {
+#         'business': settings.PAYPAL_RECEIVER_EMAIL,
+#         'amount': cart_toal_amount,
+#         'item_name': 'Order-Item-No-1 ' + str(order.id),
+#         'invoice': 'INV-001 ' + str(order.id),
+#         'currency_code': 'USD',
+#         'notify_url': 'http://{}{}'.format(host, reverse('paypal-ipn')),
+#         'return_url': 'http://{}{}'.format(host, reverse('payment-completed')),
+#         'cancel_url': 'http://{}{}'.format(host, reverse('payment-failed')),
+#     }
+
+#     paypal_payment_button = PayPalPaymentsForm(initial=paypal_dict)
+
+#     cart_total_amount = 0
+#     if 'cart_data_obj' in request.session:
+#         for id , item in request.session['cart_data_obj'].items():
+#             cart_total_amount += int(item['qty']) * float(item['price'])
+    
+#     return render(request, 'core/checkout.html' ,{'cart_data': request.session['cart_data_obj'], 'totalcartitems': len(request.session['cart_data_obj']),  "cart_total_amount": cart_total_amount, "paypal_payment_button":paypal_payment_button })
+    
+@login_required
+def checkout_view(request):
+    cart_total_amount = 0
+
+    if 'cart_data_obj' not in request.session:
+        messages.warning(request, "Your cart is empty!")
+        return redirect('home')
+
+    # Calculate total amount
+    for item in request.session['cart_data_obj'].values():
+        cart_total_amount += int(item['qty']) * float(item['price'])
+
+    # Step 1: Create the master order
+    order = CartOrders.objects.create(
+        user=request.user,
+        price=cart_total_amount
+    )
+
+    # Step 2: Create each item linked to the order
+    for item in request.session['cart_data_obj'].values():
+        CartItemOrders.objects.create(
+            user=request.user,
+            order=order,
+            invoice_no="INV-" + str(order.id),
+            product_status="processing",
+            item=item['title'],
+            image=item['image'],
+            quantity=item['qty'],
+            price=item['price'],
+            total_price=float(item['qty']) * float(item['price'])
+        )
+
+    # Step 3: Setup PayPal
+    host = request.get_host()
+    paypal_dict = {
         'business': settings.PAYPAL_RECEIVER_EMAIL,
-        'amount': 2000,
-        'item_name': 'Order-Item-No-1',
-        'invoice': 'INV-001',
+        'amount': cart_total_amount,
+        'item_name': 'Order-Item-No-1 ' + str(order.id),
+        'invoice': 'INV-001 ' + str(order.id),
         'currency_code': 'USD',
-        'notify_url': 'http://{}{}'.format(host, reverse('paypal-ipn')),
-        'return_url': 'http://{}{}'.format(host, reverse('payment-completed')),
-        'cancel_url': 'http://{}{}'.format(host, reverse('payment-failed')),
+        'notify_url': f'http://{host}{reverse("paypal-ipn")}',
+        'return_url': f'http://{host}{reverse("payment-completed")}',
+        'cancel_url': f'http://{host}{reverse("payment-failed")}',
     }
 
     paypal_payment_button = PayPalPaymentsForm(initial=paypal_dict)
 
-    # cart_total_amount = 0
-    # if 'cart_data_obj' in request.session:
-    #     for id , item in request.session['cart_data_obj'].items():
-    #         cart_total_amount += int(item['qty']) * float(item['price'])
-    
-    return render(request, 'core/checkout.html' ,{'cart_data': request.session['cart_data_obj'], 'totalcartitems': len(request.session['cart_data_obj']),  "cart_total_amount": cart_total_amount, "paypal_payment_button":paypal_payment_button })
-    
+    return render(
+        request,
+        'core/checkout.html',
+        {
+            'cart_data': request.session['cart_data_obj'],
+            'totalcartitems': len(request.session['cart_data_obj']),
+            'cart_total_amount': cart_total_amount,
+            'paypal_payment_button': paypal_payment_button
+        }
+    )
+
 
 def payment_completed(request):
     cart_total_amount = 0
@@ -358,8 +419,22 @@ def payment_completed(request):
         for id , item in request.session['cart_data_obj'].items():
             cart_total_amount += int(item['qty']) * float(item['price'])
     
-    return render(request, 'core/paymentcompleted.html' ,{'cart_data': request.session['cart_data_obj'], 'totalcartitems': len(request.session['cart_data_obj']),  "cart_total_amount": cart_total_amount, "paypal_payment_button":paypal_payment_button })
+    return render(request, 'core/paymentcompleted.html' ,{'cart_data': request.session['cart_data_obj'], 'totalcartitems': len(request.session['cart_data_obj']),  "cart_total_amount": cart_total_amount})
     
 
 def payment_failed(request):
     return render(request, 'core/paymentfailed.html')
+
+def customer_dashboard(request):
+    orders = CartOrders.objects.filter(user=request.user)
+    context = {
+        'orders': orders
+    }
+    return render(request, 'core/customer-dashboard.html', context)
+
+def order_detail(request, id):
+    order = CartOrders.objects.get(id=id, user=request.user)
+    context = {
+        'order': order
+    }
+    return render(request, 'core/order-detail.html', context)

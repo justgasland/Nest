@@ -65,14 +65,16 @@ class VendorAdmin(admin.ModelAdmin):
 
 
 class CartOrdersAdmin(admin.ModelAdmin):
-    list_display = ['order', 'price', 'paid_status', 'order_date', 'product_status']
+    list_editable = ['paid_status', 'product_status']
+    list_display = ['user', 'price', 'paid_status', 'order_date', 'product_status']
 
 
 class CartItemOrdersAdmin(admin.ModelAdmin):
-    list_display = ['order_user', 'price', 'item', 'quantity', 'product_status', 'invoice_no', 'total_price']
+    
+    list_display = ['user', 'order_user', 'price', 'item', 'quantity', 'product_status', 'invoice_no', 'total_price']
 
     def order_user(self, obj):
-        return obj.order.order
+        return obj.order.user
     order_user.short_description = 'User'
 
 
