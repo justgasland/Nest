@@ -121,38 +121,53 @@
                                         </div>
                                     </div>
                                     <div class="tab-pane fade" id="address" role="tabpanel" aria-labelledby="address-tab">
+                                         
+                                        <div>
+                                                            <form class="mb-4" method="POST"> {% csrf_token %}
+                                                                <div class="card-header">
+                                                                    <h5> Add New Address</h5>
+                                                                </div>
+                                                                <div class="row">
+                                                                    <div class="form-group col-md-6">
+                                                                        <label>Address <span class="required color-red">*</span></label>
+                                                                        <input required="" class="form-control" name="address" placeholder="Address" type="text">
+                                                                    </div>
+                                                                    <div class="form-group col-md-6">
+                                                                        <label>Mobile <span class="required color-red">*</span></label>
+                                                                        <input required="" class="form-control" name="mobile" placeholder="Mobile" type="text">
+                                                                    </div>
+                                                                </div>
+                                                                <button class="btn mt-3 border-radius-100">Save Address</button>
+                                                            </form>
+                                                        </div>
+
                                         <div class="row">
                                             <div class="col-lg-6">
+                                                 {% for addr in address %}
                                                 <div class="card mb-3 mb-lg-0">
+                                                   
                                                     <div class="card-header">
-                                                        <h3 class="mb-0">Billing Address</h3>
+                                                        <h5 class="mb-0">Billing Address</h5>
                                                     </div>
+
                                                     <div class="card-body">
+                                                        
                                                         <address>
-                                                            3522 Interstate<br>
-                                                            75 Business Spur,<br>
-                                                            Sault Ste. <br>Marie, MI 49783
+                                                            <p>{{ addr.mobile }}</p>
+                                                            <p>{{ addr.address }}</p>
+                                                            <p>{{ addr.alternate_mobile }}</p>
+                                                            <p>{{ addr.status }}</p>
                                                         </address>
-                                                        <p>New York</p>
-                                                        <a href="#" class="btn-small">Edit</a>
+                                                        
+
+                                                        <button class="btn mt-3 border-radius-100">Make default</button>
+                                                        <i class="fa fa-check-circle text-success ms-2"></i> 
                                                     </div>
+                                                    {% endfor %}
                                                 </div>
+                                                
                                             </div>
-                                            <div class="col-lg-6">
-                                                <div class="card">
-                                                    <div class="card-header">
-                                                        <h5 class="mb-0">Shipping Address</h5>
-                                                    </div>
-                                                    <div class="card-body">
-                                                        <address>
-                                                            4299 Express Lane<br>
-                                                            Sarasota, <br>FL 34249 USA <br>Phone: 1.941.227.4444
-                                                        </address>
-                                                        <p>Sarasota</p>
-                                                        <a href="#" class="btn-small">Edit</a>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                           
                                         </div>
                                     </div>
                                     <div class="tab-pane fade" id="account-detail" role="tabpanel" aria-labelledby="account-detail-tab">

@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from core.models import Product, CartItemOrders, CartOrders, Category, ProductImages, Product_Review, Wishlist, Vendor
+from core.models import Product, CartItemOrders, CartOrders, Category, ProductImages, Product_Review, Wishlist, Vendor, Address
 from django.db.models import Count, Avg
 from taggit.models import Tag
 from django.shortcuts import get_object_or_404
@@ -425,16 +425,40 @@ def payment_completed(request):
 def payment_failed(request):
     return render(request, 'core/paymentfailed.html')
 
+
+@login_required
 def customer_dashboard(request):
     orders = CartOrders.objects.filter(user=request.user)
+    address = Address.objects.filter(user=request.user)
+    
+    if request.method == "POST":
+        address= request.POST['address']
+        mobile= request.POST['mobile']
+        new_Address= Address.objects.create(user=request.user, address=address, mobile=mobile)
+        messages.success(request, "address saved")
+        return redirect ('customer-dashboard')
+
     context = {
-        'orders': orders
+        'orders': orders,
+        'address': address
     }
+
+
     return render(request, 'core/customer-dashboard.html', context)
+
+
+
 
 def order_detail(request, id):
     order = CartOrders.objects.get(id=id, user=request.user)
+    
+    order_items = CartItemOrders.objects.filter(order=order)
+    
+    
     context = {
-        'order': order
+        
+        'order_items': order_items
     }
+    
+    
     return render(request, 'core/order-detail.html', context)
